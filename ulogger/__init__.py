@@ -1,15 +1,12 @@
 try:    import time
 except: import utime as time
 
-try:    import re
-except: import ure as re
-
 try:    from micropython import const
 except: const = lambda x:x # for debug
 
 from io import TextIOWrapper
 
-__version__ = "v1.0"
+__version__ = "v1.1"
 
 DEBUG:    int = const(10)
 INFO:     int = const(20)
@@ -74,7 +71,7 @@ class Handler():
     """The Handler for logger.
     """
     _template: str
-    _map: list
+    _map: bytes
     level: int
     _direction: int
     _clock: BaseClock
@@ -135,7 +132,6 @@ class Handler():
         :type max_file_size: str
         """
         #TODO: 文件按日期存储, 最大份数的设置.
-        self._map = []
         self._direction = direction
         self.level = level
         self._clock = clock if clock else BaseClock()
@@ -173,7 +169,7 @@ class Handler():
         #     i += 1
 
         # 添加映射
-
+        self._map = bytearray()
         idx = 0
         while True:
             idx = fmt.find("&(", idx)
@@ -206,7 +202,7 @@ class Handler():
             .replace("&(time)%", "%s")\
             .replace("&(name)%", "%s")\
             .replace("&(fnname)%", "%s")\
-            + "\n" if fmt[:-1] is not '\n' else ''
+            + "\n" if fmt[:-1] != '\n' else ''
 
     def _msg(self, *args, level: int, name: str, fnname: str):
         """
@@ -283,10 +279,10 @@ class Logger():
     def _msg(self, *args, level: int, fn: str):
 
         for item in self._handlers:
-            try:
-                item._msg(*args, level=level, fnname=fn, name=self.name)
-            except:
-                print("Failed while trying to record")
+            #try:
+            item._msg(*args, level=level, fnname=fn, name=self.name)
+            #except:
+            #    print("Failed while trying to record")
 
     def debug(self, *args, fn: str = None):
         self._msg(*args, level=DEBUG, fn=fn)
