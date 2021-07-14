@@ -6,7 +6,7 @@ except: const = lambda x:x # for debug
 
 from io import TextIOWrapper
 
-__version__ = "v1.1"
+__version__ = "v1.2"
 
 DEBUG:    int = const(10)
 INFO:     int = const(20)
@@ -213,10 +213,11 @@ class Handler():
             return
         # generate msg
         temp_map = []
+        text = ''
         for item in self._map:
             if item == _msg:
                 for text_ in args:  # 将元组内的文本添加到一起
-                    text = "%s %s" % ('', text_)  # 防止用户输入其他类型(int, float)
+                    text = "%s%s" % (text, text_)  # 防止用户输入其他类型(int, float)
                 temp_map.append(text)
             elif item == _level:
                 if self._direction == TO_TERM:  # only terminal can use color.
