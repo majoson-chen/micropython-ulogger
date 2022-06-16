@@ -29,7 +29,7 @@ Please download the latest version of `.mpy` file in the [release](https://githu
 This is the simplest example:
 ```python
 import ulogger
-loggor = ulogger.Loggor(__name__)
+loggor = ulogger.Logger(__name__)
 loggor.info("hello world")
 ```
 
